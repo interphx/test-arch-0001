@@ -2,11 +2,13 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { Board } from 'model/board';
 import { Camera2d } from 'model/camera';
-import { NotGateView } from 'view/not-gate';
-import { NotItem, Item } from 'model/item';
+import { NotGateView } from './not-gate';
+import { NotGate, Gate } from 'model/gate';
 import { Vec2, MutableVec2 } from 'model/vec2';
 import { runFrameLoop } from 'utils/async';
 import { clamp } from 'utils/math';
+import { BoardItem } from 'model/board-item';
+import { testAabbIntersection } from 'utils/geometry';
 
 interface BoardViewProps {
     board: Board;
@@ -134,12 +136,16 @@ export class BoardView extends React.Component<BoardViewProps, { isPanning: bool
 
     }
 
-    isItemInCamera(item: Item) {
-        return this.props.camera.contains(item.pos.x, item.pos.y, item.size.x, item.size.y);
+    isItemInCamera(item: BoardItem) {
+        if (!item.collider) { return true; }
+        return testAabbIntersection(this.props.camera.aabb, item.collider.aabb);
     }
 
-    renderItem(item: Item) {
-        return <NotGateView key={item.id} item={item as NotItem} moveSelectedItemsBy={this.props.board.moveSelectedItemsBy} />;
+    renderItem(item: BoardItem) {
+        if (item instanceof NotGate) {
+            return <NotGateView key={item.id} item={item as NotGate} moveSelectedItemsBy={this.props.board.moveSelectedItemsBy} />;
+        }
+        return null;
     }
 
     render() {

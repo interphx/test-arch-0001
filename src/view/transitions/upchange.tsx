@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled, { keyframes } from 'styled-components';
-import { TransitionViewProps } from 'view/transitions/common';
-import { GearImageView } from 'view/common/gear-image';
+import { TransitionViewProps } from './common';
+import { GearImageView } from '../common/gear-image';
 
 enum Stage {
     Start,

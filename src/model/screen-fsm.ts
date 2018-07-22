@@ -1,6 +1,5 @@
-import { Screen, ScreenName } from "model/screens";
+import { Screen, ScreenName } from "./screens";
 import { observable } from "mobx";
-
 
 class SimpleSingleScreenState implements SingleScreenState {
     public readonly type: 'screen' = 'screen';

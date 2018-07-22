@@ -1,5 +1,5 @@
 import { observable } from "mobx";
-import { Vec2, ObservableVec2 } from "model/vec2";
+import { Vec2, ObservableVec2 } from "./vec2";
 
 export interface WireSocket {
     readonly localPos: Vec2;

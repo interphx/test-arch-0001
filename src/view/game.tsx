@@ -1,10 +1,10 @@
 import * as React          from 'react';
 import { GameStore }       from 'model/game-store';
-import { ScreensView, ScreenView } from 'view/screens';
+import { ScreensView, ScreenView } from './screens';
 import { observer }        from 'mobx-react';
 import { TransitionGroup, Transition } from 'react-transition-group';
-import { MainMenuView } from 'view/main-menu';
-import { GameplayView } from 'view/gameplay';
+import { MainMenuView } from './main-menu';
+import { GameplayView } from './gameplay';
 
 export interface GameViewProps {
     store: GameStore;

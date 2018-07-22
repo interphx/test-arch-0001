@@ -1,8 +1,25 @@
-import { ObservableVec2, Vec2 } from 'model/vec2';
-import { action, computed } from 'mobx';
+import { ObservableVec2, Vec2 } from './vec2';
+import { action, computed, observable } from 'mobx';
 import { Aabb } from 'utils/geometry';
 
 export type SelectionMode = 'replace' | 'add' | 'subtract';
+
+export interface SelectedState {
+    readonly selected: boolean;
+    setSelected(selected: boolean): void;
+}
+
+export class SimpleSelectedState {
+    @observable public selected: boolean;
+
+    constructor() {
+        this.selected = false;
+    }
+
+    setSelected(selected: boolean) {
+        this.selected = selected;
+    }
+}
 
 export interface RectangleSelection {
     readonly startPoint: Vec2;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ScreenFsm } from 'model/screen-fsm';
 import { Board } from 'model/board';
-import { BoardView } from 'view/board';
+import { BoardView } from './board';
 import { Camera2d } from 'model/camera';
 import { MainMenuScreen } from 'model/screens';
 

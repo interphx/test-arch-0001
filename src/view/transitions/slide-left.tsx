@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TransitionViewProps } from 'view/transitions/common';
+import { TransitionViewProps } from './common';
 
 export class SlideLeftTransitionView extends React.PureComponent<TransitionViewProps, { progress: number }> {
     constructor(props: TransitionViewProps) {

@@ -1,5 +1,5 @@
-import { Board, SimpleBoard } from "model/board";
-import { Camera2d, SimpleCamera2d } from "model/camera";
+import { Board, SimpleBoard } from "../board";
+import { Camera2d, SimpleCamera2d } from "../camera";
 
 export class GameplayScreen {
     public readonly type: 'gameplay' = 'gameplay';

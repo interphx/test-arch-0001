@@ -1,6 +1,8 @@
 import { observable, computed } from 'mobx';
 
-import { Vec2, ObservableVec2 } from "model/vec2";
+import { Vec2, ObservableVec2 } from "./vec2";
+import { Collider, PosSizeCollider } from 'model/collider';
+import { Aabb } from 'utils/geometry';
 
 const MIN_ZOOM = 0.001,
       MAX_ZOOM = 10;
@@ -9,6 +11,7 @@ export interface Camera2d {
     readonly pos: Vec2;
     readonly distance: number;
     readonly viewportSize: Vec2;
+    readonly aabb: Aabb;
 
     moveBy(offset: Vec2): void;
     moveBy(x: number, y: number): void;

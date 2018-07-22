@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { NotItem } from 'model/item';
+import { NotGate } from 'model/gate';
+import { SocketView } from './socket';
 
 export interface NotGateViewProps {
-    item: NotItem;
+    item: NotGate;
     moveSelectedItemsBy: (dx: number, dy: number) => void;
 }
 
@@ -44,13 +45,14 @@ export class NotGateView extends React.Component<NotGateViewProps, NotGateViewSt
     }
 
     handleMouseMove(event: MouseEvent) {
-        const dx = event.clientX - this.lastMouseX,
+        const { item } = this.props,
+              dx = event.clientX - this.lastMouseX,
               dy = event.clientY - this.lastMouseY;
         
-        if (this.props.item.selected) {
+        if (item.selection.selected) {
             this.props.moveSelectedItemsBy(dx, dy);
         } else {
-            this.props.item.moveBy(dx, dy);
+            item.position.moveBy(dx, dy);
         }
         this.lastMouseX = event.clientX;
         this.lastMouseY = event.clientY;
@@ -68,7 +70,7 @@ export class NotGateView extends React.Component<NotGateViewProps, NotGateViewSt
         const item  = this.props.item;
 
         const color = (item.background.type === 'color')
-            ? item.selected ? 'blue' : item.background.color
+            ? item.selection.selected ? 'blue' : item.background.color
             : undefined;
 
         const imageUrl = (item.background.type === 'image')
@@ -78,31 +80,20 @@ export class NotGateView extends React.Component<NotGateViewProps, NotGateViewSt
         const SvgComponent = (item.background.type === 'color') ? 'rect' : 'image';
 
         return (
-            <SvgComponent
-                width={item.size.x} 
-                height={item.size.y}
-                x={item.pos.x}
-                y={item.pos.y}
-                fill={color}
-                xlinkHref={imageUrl}
-                preserveAspectRatio="none"
-                
-                onMouseDown={this.handleMouseDown}
-            />
+            <g
+                transform={`translate(${item.position.x}, ${item.position.y})`}
+            >
+                { item.sockets.map(socket => <SocketView key={socket.id} socket={socket} />) }
+                <SvgComponent
+                    width={item.size.x} 
+                    height={item.size.y}
+                    fill={color}
+                    xlinkHref={imageUrl}
+                    preserveAspectRatio="none"
+                    
+                    onMouseDown={this.handleMouseDown}
+                />
+            </g>
         );
     }
 }
-
-/*
-export const NotGateView = observer(
-    ({ item }: NotGateProps) => {
-        let color = item.background.type === 'color' ? item.background.color : 'yellow';
-        return <rect
-            width={item.size.x} 
-            height={item.size.y}
-            x={item.pos.x}
-            y={item.pos.y}
-            fill={item.selected ? 'blue' : color}
-        ></rect>
-    }
-);*/

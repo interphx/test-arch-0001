@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Screen, ScreenName } from 'model/screens';
 import { observer } from 'mobx-react';
 import { ScreenState, TransitionState } from 'model/screen-fsm';
-import { FadeTransitionView } from 'view/transitions/fade';
-import { SlideLeftTransitionView } from 'view/transitions/slide-left';
-import { UpchangeTransitionView } from 'view/transitions/upchange';
+import { FadeTransitionView } from './transitions/fade';
+import { SlideLeftTransitionView } from './transitions/slide-left';
+import { UpchangeTransitionView } from './transitions/upchange';
 
 function getTransitionComponent(transitionName: string) {
     const components = {

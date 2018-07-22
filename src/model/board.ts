@@ -1,15 +1,16 @@
 import { observable, action } from 'mobx';
-import { Item, NotItem } from 'model/item';
-import { RectangleSelection, SimpleSelection, SelectionMode } from 'model/selection';
-import { Vec2 } from 'model/vec2';
+import { Gate, NotGate } from './gate';
+import { RectangleSelection, SimpleSelection, SelectionMode } from './selection';
+import { Vec2 } from './vec2';
 import { testAabbIntersection } from 'utils/geometry';
+import { BoardItem } from './board-item';
 
 export interface Board {
     readonly backgroundColor: string;
-    readonly items: ReadonlyArray<Item>;
+    readonly items: ReadonlyArray<BoardItem>;
     readonly selection: RectangleSelection | null;
 
-    addItem(item: Item): void;
+    addItem(item: BoardItem): void;
     removeItem(itemId: string): void;
 
     startSelection(startPos: Vec2): void;
@@ -21,13 +22,13 @@ export interface Board {
 
 export class SimpleBoard implements Board {
     @observable backgroundColor: string = 'white';
-    @observable items: Item[] = observable.array([]);
+    @observable items: BoardItem[] = observable.array([]);
     @observable selection: RectangleSelection | null = null;
 
     constructor() {
         for (let i = 0; i < 1000; ++i) {
-            let item = new NotItem(); 
-            item.moveBy(Math.random() * 8000 - 4000, Math.random() * 6000 - 3000);
+            let item = new NotGate(); 
+            item.position.moveBy(Math.random() * 8000 - 4000, Math.random() * 6000 - 3000);
             this.addItem(item);
         }
 
@@ -36,7 +37,7 @@ export class SimpleBoard implements Board {
     }
 
     @action
-    public addItem(item: Item) {
+    public addItem(item: BoardItem) {
         this.items.push(item);
     }
 
@@ -65,26 +66,29 @@ export class SimpleBoard implements Board {
             switch (mode) {
                 case 'replace': {
                     for (const item of this.items) {
-                        if (testAabbIntersection(item.aabb, this.selection.aabb)) {
-                            item.setSelected(true);
+                        if (!item.collider || !item.selection) { continue; }
+                        if (testAabbIntersection(item.collider.aabb, this.selection.aabb)) {
+                            item.selection.setSelected(true);
                         } else {
-                            item.setSelected(false);
+                            item.selection.setSelected(false);
                         }
                     }
                     break;
                 }
                 case 'subtract': {
                     for (const item of this.items) {
-                        if (testAabbIntersection(item.aabb, this.selection.aabb)) {
-                            item.setSelected(false);
+                        if (!item.collider || !item.selection) { continue; }
+                        if (testAabbIntersection(item.collider.aabb, this.selection.aabb)) {
+                            item.selection.setSelected(false);
                         }
                     }
                     break;
                 }
                 case 'add': {
                     for (const item of this.items) {
-                        if (testAabbIntersection(item.aabb, this.selection.aabb)) {
-                            item.setSelected(true);
+                        if (!item.collider || !item.selection) { continue; }
+                        if (testAabbIntersection(item.collider.aabb, this.selection.aabb)) {
+                            item.selection.setSelected(true);
                         }
                     }
                     break;
@@ -103,8 +107,9 @@ export class SimpleBoard implements Board {
     @action
     moveSelectedItemsBy(dx: number, dy: number) {
         for (let item of this.items) {
-            if (item.selected) {
-                item.moveBy(dx, dy);
+            if (!item.selection) { continue; }
+            if (item.selection.selected) {
+                item.position.moveBy(dx, dy);
             }
         }
     }
@@ -113,6 +118,15 @@ export class SimpleBoard implements Board {
     setSelectionMode(mode: SelectionMode) {
         if (this.selection) {
             this.selection.setMode(mode);
+        }
+    }
+
+    @action
+    deselectAll() {
+        for (const item of this.items) {
+            if (item.selection && item.selection.selected) {
+                item.selection.setSelected(false);
+            }
         }
     }
 }
