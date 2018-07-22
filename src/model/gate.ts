@@ -34,11 +34,11 @@ export abstract class BaseGate implements Gate {
 export class NotGate extends BaseGate {
     @observable size    = new ObservableVec2(108, 116);
                 sockets = [
-                    new InputSocket({ x: 108 / 2 - 4, y: 0 - 8 }),
-                    new OutputSocket({ x: 108 / 2 - 4, y: 116 }),
+                    new InputSocket( size => ({ x: (this.size.x - size.x) / 2, y: -size.y     })),
+                    new OutputSocket(size => ({ x: (this.size.x - size.x) / 2, y: this.size.y }))
                 ];
 
-    private backgroundDefault = { type: 'image' as 'image', url: assets.images.gateNotBase };
+    private backgroundDefault  = { type: 'image' as 'image', url: assets.images.gateNotBase };
     private backgroundSelected = { type: 'image' as 'image', url: assets.images.gateNotSelected }; 
 
     // @computed

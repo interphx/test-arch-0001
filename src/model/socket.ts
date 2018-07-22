@@ -6,8 +6,9 @@ export type SocketType = 'input' | 'output';
 
 export interface Socket {
     readonly localPos: Vec2;
-    readonly type: SocketType;
-    readonly power: number;
+    readonly type    : SocketType;
+    readonly power   : number;
+    readonly size    : Vec2;
     
     setPower(power: number): void;
 }
@@ -15,9 +16,11 @@ export interface Socket {
 abstract class BaseSocket {
                 public          id      : string          = generateRandomId();
     @observable public          localPos: ObservableVec2;
+    @observable public          size    : ObservableVec2  = new ObservableVec2(8, 8);
     @observable public          power   : number          = 0;
 
-    constructor(localPos: Vec2) {
+    constructor(getLocalPos: (size: Vec2) => Vec2) {
+        const localPos = getLocalPos(this.size);
         this.localPos = new ObservableVec2(localPos.x, localPos.y);
     }
 
