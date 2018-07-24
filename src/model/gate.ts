@@ -6,7 +6,7 @@ import { SelectedState, SimpleSelectedState } from 'model/selection';
 import { generateRandomId } from 'utils/id';
 
 import { AdvancedMutableVec2, AdvancedObservableMutableVec2, ObservableVec2, Vec2 } from './vec2';
-import { Socket, InputSocket, OutputSocket } from 'model/socket';
+import { Socket, SimpleInputSocket, SimpleOutputSocket } from 'model/socket';
 
 type GateBackground = 
         | { type: 'image', url: string }
@@ -34,8 +34,8 @@ export abstract class BaseGate implements Gate {
 export class NotGate extends BaseGate {
     @observable size    = new ObservableVec2(108, 116);
                 sockets = [
-                    new InputSocket( size => ({ x: (this.size.x - size.x) / 2, y: -size.y     })),
-                    new OutputSocket(size => ({ x: (this.size.x - size.x) / 2, y: this.size.y }))
+                    new SimpleInputSocket( size => ({ x: (this.size.x - size.x) / 2, y: -size.y     })),
+                    new SimpleOutputSocket(size => ({ x: (this.size.x - size.x) / 2, y: this.size.y }))
                 ];
 
     private backgroundDefault  = { type: 'image' as 'image', url: assets.images.gateNotBase };

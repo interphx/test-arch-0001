@@ -21,13 +21,22 @@ export class SocketView extends React.Component<SocketViewProps, SocketViewState
         const { socket } = this.props;
 
         return (
-            <rect
-                x={socket.localPos.x}
-                y={socket.localPos.y}
-                width={8}
-                height={8}
-                fill={socket.power > 0.5 ? 'red' : 'black'}
-            />
+            <g>
+                <rect
+                    x={socket.localPos.x - 4}
+                    y={socket.localPos.y - 4}
+                    width={socket.size.x + 8}
+                    height={socket.size.y + 8}
+                    fill={`rgba(0, 0, 0, 0.3)`}
+                />
+                <rect
+                    x={socket.localPos.x}
+                    y={socket.localPos.y}
+                    width={socket.size.x}
+                    height={socket.size.y}
+                    fill={socket.power > 0.5 ? 'red' : 'black'}
+                />
+            </g>
         );
     }
 }

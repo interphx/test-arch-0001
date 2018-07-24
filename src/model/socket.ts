@@ -13,6 +13,14 @@ export interface Socket {
     setPower(power: number): void;
 }
 
+export interface InputSocket extends Socket {
+    readonly type: 'input';
+}
+
+export interface OutputSocket extends Socket {
+    readonly type: 'output'
+}
+
 abstract class BaseSocket {
                 public          id      : string          = generateRandomId();
     @observable public          localPos: ObservableVec2;
@@ -29,10 +37,10 @@ abstract class BaseSocket {
     }
 }
 
-export class InputSocket extends BaseSocket {
+export class SimpleInputSocket extends BaseSocket {
     public readonly type: SocketType = 'input';
 }
 
-export class OutputSocket extends BaseSocket {
+export class SimpleOutputSocket extends BaseSocket {
     public readonly type: SocketType = 'output';
 }
